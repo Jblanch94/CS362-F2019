@@ -681,6 +681,11 @@ int getCost(int cardNumber)
     return -1;
 }
 
+
+
+
+        
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
     int i;
@@ -699,6 +704,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     if (nextPlayer > (state->numPlayers - 1)) {
         nextPlayer = 0;
     }
+
 
 
     //uses switch to select card and perform actions
@@ -895,7 +901,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             int card_not_discarded = 1;//Flag for discard set!
             while(card_not_discarded) {
                 if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
-                    state->coins += 4;//Add 4 coins to the amount of coins
+                    addCoins(4, state); //Add 4 coins to the amount of coins
                     state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
                     state->discardCount[currentPlayer]++;
                     for (; p < state->handCount[currentPlayer]; p++) {
@@ -940,6 +946,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 
         return 0;
+
 
     case great_hall:
         //+1 Card
