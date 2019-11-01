@@ -758,6 +758,7 @@ int baronRefactored(int choice1, struct gameState *state, int currentPlayer)
         {
             if (state->hand[currentPlayer][p] == estate)
             { //Found an estate card!
+                //state->coins += 4;
                 addNumCoins(state, 4); //Add 4 coins to the amount of coins
                 state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
                 state->discardCount[currentPlayer]++;
