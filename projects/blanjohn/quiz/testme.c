@@ -8,7 +8,7 @@ char inputChar()
     // TODO: rewrite this function
 
   /* used ascii table to include each character that is needed
-  126 - 32 = 95 so rand()%95 goes from 0 to 94 and we need to start at 32 
+  126 - 32 = 94 so rand()%95 goes from 0 to 93 and we need to start at 32 
   which is the space and end at 126 which is the tilde */
     int random = rand() % 94 + 32;
 
@@ -33,7 +33,6 @@ char *inputString()
 
   s[5] = '\0';
   return s;
-
 }
 
 void testme()
