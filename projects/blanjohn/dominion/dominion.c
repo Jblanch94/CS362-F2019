@@ -793,7 +793,7 @@ int baronRefactored(int choice1, struct gameState *state, int currentPlayer)
             else
             {
                 //endless to iterate through hand p is never increased so it never makes it through   
-                //p++; //Next card
+                p++; //Next card
             }
         }
     }
@@ -893,7 +893,7 @@ int ambassadorRefactored(int choice1, int choice2, struct gameState *state, int 
         if (i != handPos && i == state->hand[currentPlayer][choice1] && i != choice1)
         {
             //bug introduced so that j never increases and it every player does not have enough cards to discard even if they do
-            //j++;
+            j++;
         }
     }
     if (j < choice2)
@@ -998,7 +998,7 @@ int tributeRefactored(struct gameState *state, int currentPlayer, int nextPlayer
         if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold)
         { //Treasure cards
         //bug introduced so that player does not gain any coins
-            addNumCoins(state, 0);
+            state->coins = state->coins + 0;
         }
 
         else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall)
@@ -1009,7 +1009,7 @@ int tributeRefactored(struct gameState *state, int currentPlayer, int nextPlayer
         else
         { //Action Card
         //bug introduced so that player does not gain any action
-            state->numActions = state->numActions + 0;
+            state->numActions = state->numActions + 2;
         }
     }
 

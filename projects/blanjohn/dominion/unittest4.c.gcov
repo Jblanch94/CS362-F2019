@@ -1,0 +1,465 @@
+        -:    0:Source:unittest4.c
+        -:    0:Graph:unittest4.gcno
+        -:    0:Data:unittest4.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <string.h>
+        -:    6:#include <assert.h>
+        -:    7:#include <stdlib.h>
+        -:    8:#include <math.h>
+        -:    9:
+        -:   10:#define TESTCARD "Tribute"
+        -:   11:
+function main called 1 returned 100% blocks executed 88%
+        1:   12:int main ()
+        -:   13:{
+        -:   14:	//set up state so game can be initialzed with parameters needed for minion function
+        -:   15:    struct gameState G, testG;
+        1:   16:    int seed = 1000;
+        1:   17:    int numPlayers = 2;
+        -:   18:    int i;
+        1:   19:    int found = 0;
+        1:   20:    int currentPlayer = whoseTurn(&G);
+call    0 returned 100%
+        1:   21:    int nextPlayer = currentPlayer + 1;
+        1:   22:    int tributeRevealedCards[2] = {-1, -1};
+        1:   23:    int k[10] = {adventurer, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy, council_room};   
+        -:   24:
+        -:   25:    //start game
+        1:   26:    initializeGame(numPlayers, k, seed, &G);
+call    0 returned 100%
+        -:   27:
+        1:   28:    printf("-------------------------TESTING CARD: %s ------------------------\n", TESTCARD);
+call    0 returned 100%
+        -:   29:
+        -:   30:    //check if tribute card was discarded
+        1:   31:    printf("TEST 1: Check if tribute card was discarded.\n");
+call    0 returned 100%
+        -:   32:
+        1:   33:    memcpy(&testG, &G, sizeof(struct gameState));
+        -:   34:
+        -:   35:    //get number of cards in hand
+        1:   36:    int numCards = numHandCards(&testG);
+call    0 returned 100%
+        -:   37:
+        -:   38:    //call tribute card function
+        1:   39:    tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:   40:
+        -:   41:    //if find tribute card in hand then it was not discarded so test failed otherwise passed
+        6:   42:    for(i = 0; i < numCards; i++) 
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   43:    {
+        5:   44:    	if(testG.hand[currentPlayer][i] == tribute)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   45:    	{
+    #####:   46:    		found = 1;
+        -:   47:    	}
+        -:   48:    }
+        -:   49:
+        1:   50:    if(found == 1)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   51:    {
+    #####:   52:    	printf("Test failed did not discard tribute card.\n");
+call    0 never executed
+        -:   53:    }
+        -:   54:    else 
+        -:   55:    {
+        1:   56:    	printf("Test passed did discard tribute card.\n");
+call    0 returned 100%
+        -:   57:    }
+        -:   58:
+        1:   59:    printf("TEST 1 has completed.\n\n");
+call    0 returned 100%
+        -:   60:
+        -:   61:
+        -:   62:    //test if one of the revealed cards is coin card player gets +2 coins
+        1:   63:    printf("TEST 2: check if revealed card is coin type that you gain +2 coins.\n");
+call    0 returned 100%
+        -:   64:
+        1:   65:    memcpy(&testG, &G, sizeof(struct gameState));
+        -:   66:
+        1:   67:    tributeRevealedCards[0] = copper;
+        -:   68:
+        1:   69:    tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:   70:
+        1:   71:    printf("Number of coins: %d, Expected number of coins: %d\n", testG.coins, G.coins + 2);
+call    0 returned 100%
+        -:   72:
+        1:   73:    if(testG.coins == G.coins + 2)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   74:    {
+    #####:   75:    	printf("Test passed for 1 revealed card of coin type added two coins to player.\n");
+call    0 never executed
+        -:   76:    }
+        -:   77:    else 
+        -:   78:    {
+        1:   79:    	printf("Test failed did not add two coins to player for revealed card of coin type.\n");
+call    0 returned 100%
+        -:   80:    }
+        -:   81:
+        1:   82:    printf("TEST 2 has completed.\n\n");
+call    0 returned 100%
+        -:   83:
+        -:   84:
+        -:   85:    //test for two different named coin cards player gets +4 coins
+        1:   86:    printf("TEST 3: check if two revealed cards of different names yields +4 coins.\n");
+call    0 returned 100%
+        -:   87:
+        -:   88:
+        1:   89:    memcpy(&testG, &G, sizeof(struct gameState));
+        -:   90:
+        1:   91:    tributeRevealedCards[0] = copper;
+        1:   92:    tributeRevealedCards[1] = silver;
+        -:   93:
+        1:   94:    tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:   95:
+        1:   96:    printf("Number of coins: %d, Expected number of coins: %d\n", testG.coins, G.coins + 4);
+call    0 returned 100%
+        -:   97:
+        1:   98:    if(testG.coins == G.coins + 4)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   99:    {
+    #####:  100:    	printf("Test passed added four coins to player when revealed two coin type cards of different names.\n");
+call    0 never executed
+        -:  101:    }
+        -:  102:    else 
+        -:  103:    {
+        1:  104:    	printf("Test failed did not add four coins to player when revealed two coin type cards of different names.\n");
+call    0 returned 100%
+        -:  105:    }
+        -:  106:
+        1:  107:    tributeRevealedCards[0] = -1;
+        1:  108:    tributeRevealedCards[1] = -1;
+        -:  109:
+        1:  110:    printf("TEST 3 has completed.\n\n");
+call    0 returned 100%
+        -:  111:
+        -:  112:    //test if no coin cards that player gets +0 coins
+        1:  113:    printf("TEST 4: check if neither of the revealed cards are coin types and make sure player does not get any coins.\n");
+call    0 returned 100%
+        -:  114:
+        1:  115:    initializeGame(numPlayers, k, seed, &G);
+call    0 returned 100%
+        -:  116:
+        1:  117:    memcpy(&testG, &G, sizeof(struct gameState));
+        -:  118:
+        1:  119:    tributeRevealedCards[0] = estate;
+        1:  120:    tributeRevealedCards[1] = gardens;
+        -:  121:
+        1:  122:    tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  123:
+        1:  124:    printf("Number of coins: %d, Expected number of coins: %d\n", testG.coins, G.coins);
+call    0 returned 100%
+        -:  125:
+        1:  126:    if(testG.coins == G.coins)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  127:    {
+        1:  128:    	printf("Test passed for not adding any coins to player when no coin type cards were revealed.\n");
+call    0 returned 100%
+        -:  129:    }
+        -:  130:    else 
+        -:  131:    {
+    #####:  132:    	printf("Test failed for adding coins to player when no coin type cards were revealed.\n");
+call    0 never executed
+        -:  133:    }
+        -:  134:
+        1:  135:    tributeRevealedCards[0] = -1;
+        1:  136:    tributeRevealedCards[1] = -1;
+        -:  137:
+        1:  138:   printf("TEST 4 has completed.\n\n");
+call    0 returned 100%
+        -:  139:
+        -:  140:   //test if 1 action card revealed player gets +2 action
+        1:  141:   printf("TEST 5: check if number of actions increases by 2 for an action type card revealed.\n");
+call    0 returned 100%
+        -:  142:
+        1:  143:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  144:
+        1:  145:   tributeRevealedCards[0] = baron;
+        1:  146:   tributeRevealedCards[1] = estate;
+        -:  147:
+        1:  148:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  149:
+        1:  150:   printf("Number of actions: %d, Expected number of actions: %d\n", testG.numActions, G.numActions + 2);
+call    0 returned 100%
+        -:  151:
+        1:  152:   if(testG.numActions == G.numActions + 2)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  153:   {
+        1:  154:   	printf("Test passed for increasing number of actions by 2 for given player.\n");
+call    0 returned 100%
+        -:  155:   }
+        -:  156:   else
+        -:  157:   {
+    #####:  158:   	printf("Test failed for not increasing number of actions by 2 for given player.\n");
+call    0 never executed
+        -:  159:   }
+        -:  160:
+        1:  161:   tributeRevealedCards[0] = -1;
+        1:  162:   tributeRevealedCards[1] = -1;
+        -:  163:
+        1:  164:   printf("TEST 5 has completed.\n\n");
+call    0 returned 100%
+        -:  165:
+        -:  166:   //test for two different action cards revealed yields +4 action for player
+        1:  167:   printf("TEST 6: check if two different action cards revealed yields +4 action.\n");
+call    0 returned 100%
+        -:  168:
+        1:  169:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  170:
+        1:  171:   tributeRevealedCards[0] = baron;
+        1:  172:   tributeRevealedCards[1] = mine;
+        -:  173:
+        1:  174:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  175:
+        1:  176:   printf("Number of actions: %d, Expected number of actions: %d\n", testG.numActions, G.numActions  + 4);
+call    0 returned 100%
+        -:  177:
+        1:  178:   if(testG.numActions == G.numActions + 4)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  179:   {
+    #####:  180:   	printf("Test passed for adding 4 actions to player for two revealed action cards of different names.\n");
+call    0 never executed
+        -:  181:   }
+        -:  182:   else
+        -:  183:   {
+        1:  184:   	printf("Test failed for not adding 4 actions to player for two revealed action cards of different names.\n");
+call    0 returned 100%
+        -:  185:   }
+        -:  186:
+        1:  187:   tributeRevealedCards[0] = -1;
+        1:  188:   tributeRevealedCards[1] = -1;
+        -:  189:
+        1:  190:   printf("TEST 6 has completed.\n\n");
+call    0 returned 100%
+        -:  191:
+        -:  192:   //test for no action cards revealed player does not gain any action
+        1:  193:   printf("TEST 7: check if no action cards revealed player does not gain any action.\n");
+call    0 returned 100%
+        -:  194:
+        1:  195:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  196:
+        1:  197:   tributeRevealedCards[0] = copper;
+        1:  198:   tributeRevealedCards[1] = estate;
+        -:  199:
+        1:  200:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  201:
+        1:  202:   printf("Number of actions: %d, Expected number of actions: %d\n", testG.numActions, G.numActions);
+call    0 returned 100%
+        -:  203:
+        1:  204:   if(testG.numActions == G.numActions)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  205:   {
+    #####:  206:   	printf("Test passed for not rewarding player with any actions for no revealed action cards.\n");
+call    0 never executed
+        -:  207:   }
+        -:  208:
+        -:  209:   else
+        -:  210:   {
+        1:  211:   	printf("Test failed for rewarding player with actions for no revealed action cards.\n");
+call    0 returned 100%
+        -:  212:   }
+        -:  213:
+        1:  214:   tributeRevealedCards[0] = -1;
+        1:  215:   tributeRevealedCards[1] = -1;
+        -:  216:
+        1:  217:   printf("TEST 7 has completed.\n\n");
+call    0 returned 100%
+        -:  218:
+        -:  219:   //test if player draws two cards if one revealed card is a victory card
+        1:  220:   printf("TEST 8: check if revealed card has one victory that player draws two cards.\n");
+call    0 returned 100%
+        -:  221:   
+        1:  222:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  223:
+        1:  224:   tributeRevealedCards[0] = estate;
+        1:  225:   tributeRevealedCards[1] = copper;
+        -:  226:
+        1:  227:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  228:
+        -:  229:   //check if added one card to hand, should be same since discarded tribute card then add one card to hand should be 5
+        1:  230:   printf("Number of cards in hand: %d, Expected number of cards in hand: %d\n", numHandCards(&testG), numHandCards(&G));
+call    0 returned 100%
+call    1 returned 100%
+call    2 returned 100%
+        -:  231:
+        1:  232:   if(numHandCards(&testG) == numHandCards(&G)) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:  233:   	printf("Test passed for adding one card to hand.\n");
+call    0 never executed
+        -:  234:   } else {
+        1:  235:   		printf("Test failed for not adding exactly one card to hand.\n");
+call    0 returned 100%
+        -:  236:   }
+        -:  237:
+        1:  238:   tributeRevealedCards[0] = -1;
+        1:  239:   tributeRevealedCards[1] = -1;
+        -:  240:
+        1:  241:   printf("TEST 8 has completed.\n\n");
+call    0 returned 100%
+        -:  242:
+        -:  243:   //test if player draws four cards for two different named victory cards
+        1:  244:   printf("TEST 9: check if 2 victory yields player drawing four cards.\n");
+call    0 returned 100%
+        -:  245:
+        1:  246:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  247:
+        1:  248:   tributeRevealedCards[0] = estate;
+        1:  249:   tributeRevealedCards[1] = province;
+        -:  250:
+        1:  251:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  252:
+        1:  253:   printf("Number of cards in hand: %d, Expected number of cards in hand: %d\n", numHandCards(&testG), numHandCards(&G) + 3);
+call    0 returned 100%
+call    1 returned 100%
+call    2 returned 100%
+        -:  254:
+        1:  255:   if(numHandCards(&testG) == numHandCards(&G)) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:  256:   	printf("Test passed for adding two cards to player's hand.\n");
+call    0 never executed
+        -:  257:   } else {
+        1:  258:   	printf("Test failed for not adding exactly two cards to player's hand.\n");
+call    0 returned 100%
+        -:  259:   }
+        -:  260:
+        1:  261:   tributeRevealedCards[0] = -1;
+        1:  262:   tributeRevealedCards[1] = -1;
+        -:  263:
+        1:  264:   printf("TEST 9 has completed.\n\n");
+call    0 returned 100%
+        -:  265:
+        -:  266:   //test if 2 victory cards with same name yield +2 cards 
+        1:  267:   printf("TEST 10: check if 2 victory cards with same name yield draw of 2 cards.\n");
+call    0 returned 100%
+        -:  268:
+        1:  269:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  270:
+        1:  271:   tributeRevealedCards[0] = estate;
+        1:  272:   tributeRevealedCards[1] = estate;
+        -:  273:
+        1:  274:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  275:
+        1:  276:   printf("Number of cards in hand: %d, Expected number of cards in hand: %d\n", numHandCards(&testG), numHandCards(&G) + 1);
+call    0 returned 100%
+call    1 returned 100%
+call    2 returned 100%
+        -:  277:
+        1:  278:   if(numHandCards(&testG) == numHandCards(&G) + 1)
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+        -:  279:   {
+    #####:  280:   		printf("Test passed for adding two cards to player's hand.\n");
+call    0 never executed
+        -:  281:   }
+        -:  282:
+        -:  283:   else 
+        -:  284:   {
+        1:  285:   		printf("Test failed for not adding two cards to player's hand.\n");
+call    0 returned 100%
+        -:  286:   }
+        -:  287:
+        -:  288:
+        1:  289:   tributeRevealedCards[0] = -1;
+        1:  290:   tributeRevealedCards[1] = -1;
+        -:  291:
+        1:  292:   printf("TEST 10 has completed.\n");
+call    0 returned 100%
+        -:  293:
+        -:  294:
+        -:  295:   //test if no victory cards that player does not gain any cards
+        1:  296:   printf("TEST 11: check if no victory cards does not add cards to player's hand.\n");
+call    0 returned 100%
+        -:  297:
+        1:  298:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  299:
+        1:  300:   tributeRevealedCards[0] = copper;
+        1:  301:   tributeRevealedCards[1] = gold;
+        -:  302:
+        1:  303:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  304:
+        1:  305:   printf("Number of cards in hand: %d, Expected number of cards in hand: %d\n", numHandCards(&testG), numHandCards(&G) - 1);
+call    0 returned 100%
+call    1 returned 100%
+call    2 returned 100%
+        -:  306:
+        1:  307:   if(numHandCards(&testG) == numHandCards(&G) - 1) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:  308:   	printf("Test passed for not adding any cards to player's hand.\n");
+call    0 never executed
+        -:  309:   } else {
+        1:  310:   	printf("Test failed for adding cards to player's hand.\n");
+call    0 returned 100%
+        -:  311:   }
+        -:  312:
+        1:  313:   tributeRevealedCards[0] = -1;
+        1:  314:   tributeRevealedCards[1] = -1;
+        -:  315:
+        1:  316:   printf("TEST 11 has completed.\n\n");
+call    0 returned 100%
+        -:  317:
+        1:  318:   printf("TEST 12: check if player to left discarded two cards.\n");
+call    0 returned 100%
+        -:  319:
+        1:  320:   memcpy(&testG, &G, sizeof(struct gameState));
+        -:  321:
+        1:  322:   tributeRevealedCards[0] = copper;
+        1:  323:   tributeRevealedCards[1] = silver;
+        -:  324:
+        1:  325:   tributeRefactored(&testG, currentPlayer, nextPlayer, tributeRevealedCards);
+call    0 returned 100%
+        -:  326:
+        1:  327:   printf("Number of cards discarded for left player: %d, Expected number of cards discarded for left: %d\n", testG.discardCount[nextPlayer], G.discardCount[nextPlayer] + 2);
+call    0 returned 100%
+        -:  328:
+        1:  329:   if(testG.discardCount[nextPlayer] == G.discardCount[nextPlayer] + 2) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  330:   	printf("Test passed for discarding top 2 cards.\n");
+call    0 never executed
+        -:  331:   } else {
+        1:  332:   	printf("Test failed for not discarding top 2 cards.\n");
+call    0 returned 100%
+        -:  333:   }
+        -:  334:
+        1:  335:   printf("TEST 12 has completed.\n\n");
+call    0 returned 100%
+        -:  336:
+        -:  337:
+        1:  338:    return 0;
+        -:  339:}
