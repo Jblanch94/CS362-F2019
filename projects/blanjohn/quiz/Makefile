@@ -6,7 +6,9 @@ testme:
 	gcc -o testme testme.c -g $(CFLAGS)
 
 run:
-	./testme 
+	./testme
+	gcov testme.c
+	
 
 .PHONY: all
 

@@ -1,0 +1,82 @@
+        -:    0:Source:testme.c
+        -:    0:Graph:testme.gcno
+        -:    0:Data:testme.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include<stdio.h>
+        -:    2:#include<string.h>
+        -:    3:#include<stdlib.h>
+        -:    4:#include<time.h>
+        -:    5:
+   398146:    6:char inputChar()
+        -:    7:{
+        -:    8:    // TODO: rewrite this function
+        -:    9:
+        -:   10:  /* used ascii table to include each character that is needed
+        -:   11:  126 - 32 = 94 so rand()%95 goes from 0 to 93 and we need to start at 32 
+        -:   12:  which is the space and end at 126 which is the tilde */
+   398146:   13:    int random = rand() % 94 + 32;
+        -:   14:
+        -:   15:    /* needed to cast an int to a char
+        -:   16:    https://stackoverflow.com/questions/5008394/c-casting-int-to-char-and-append-char-to-char */
+   398146:   17:    char input = (char) random;
+   398146:   18:    return input;
+        -:   19:}
+        -:   20:
+   398146:   21:char *inputString()
+        -:   22:{
+        -:   23:    // TODO: rewrite this function
+        -:   24:
+   398146:   25:  char *s = malloc(6 * sizeof(char));
+        -:   26:  int i;
+        -:   27:
+  2388876:   28:  for(i = 0; i < 5; i++) {
+  1990730:   29:    int random = rand () % 16 + 101;
+  1990730:   30:    char input = (char) random;
+  1990730:   31:    s[i] = input;
+        -:   32:  }
+        -:   33:
+   398146:   34:  s[5] = '\0';
+   398146:   35:  return s;
+        -:   36:}
+        -:   37:
+        1:   38:void testme()
+        -:   39:{
+        1:   40:  int tcCount = 0;
+        -:   41:  char *s;
+        -:   42:  char c;
+        1:   43:  int state = 0;
+        -:   44:  while (1)
+        -:   45:  {
+   796291:   46:    tcCount++;
+   398146:   47:    c = inputChar();
+   398146:   48:    s = inputString();
+   398146:   49:    printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
+        -:   50:
+   398146:   51:    if (c == '[' && state == 0) state = 1;
+   398146:   52:    if (c == '(' && state == 1) state = 2;
+   398146:   53:    if (c == '{' && state == 2) state = 3;
+   398146:   54:    if (c == ' '&& state == 3) state = 4;
+   398146:   55:    if (c == 'a' && state == 4) state = 5;
+   398146:   56:    if (c == 'x' && state == 5) state = 6;
+   398146:   57:    if (c == '}' && state == 6) state = 7;
+   398146:   58:    if (c == ')' && state == 7) state = 8;
+   398146:   59:    if (c == ']' && state == 8) state = 9;
+   398146:   60:    if (s[0] == 'r' && s[1] == 'e'
+     1535:   61:       && s[2] == 's' && s[3] == 'e'
+        4:   62:       && s[4] == 't' && s[5] == '\0'
+        1:   63:       && state == 9)
+        -:   64:    {
+        1:   65:      printf("error ");
+        1:   66:      exit(200);
+        -:   67:    }
+        -:   68:  }
+        -:   69:}
+        -:   70:
+        -:   71:
+        1:   72:int main(int argc, char *argv[])
+        -:   73:{
+        1:   74:    srand(time(NULL));
+        1:   75:    testme();
+    #####:   76:    return 0;
+        -:   77:}
