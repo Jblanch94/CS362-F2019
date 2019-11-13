@@ -793,7 +793,7 @@ int baronRefactored(int choice1, struct gameState *state, int currentPlayer)
             else
             {
                 //endless to iterate through hand p is never increased so it never makes it through   
-                //p++; //Next card
+                p++; //Next card
             }
         }
     }
