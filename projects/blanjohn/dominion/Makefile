@@ -6,18 +6,22 @@ rngs.o: rngs.h rngs.c
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -c dominion.c -g  $(CFLAGS)
 
-randomtestcard1: dominion.o rngs.o
+
+randomtestresults: dominion.o rngs.o
 	gcc -o randomtest1 -g randomtestcard1.c dominion.o rngs.o $(CFLAGS)
 	./randomtest1 
 	gcov randomtestcard1.c -b -f >> randomtestresults.out
 	cat randomtestcard1.c.gcov >> randomtestresults.out
-	
-randomtestcard2: dominion.o rngs.o
+
 	gcc -o randomtest2 -g randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 	./randomtest2 
 	gcov randomtestcard2.c -b -f >> randomtestresults.out
 	cat randomtestcard2.c.gcov >> randomtestresults.out
 
+	gcc -o randomtest3 -g randomtestcard3.c dominion.o rngs.o $(CFLAGS)
+	./randomtest3 
+	gcov randomtestcard3.c -b -f >> randomtestresults.out
+	cat randomtestcard3.c.gcov >> randomtestresults.out
 
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)

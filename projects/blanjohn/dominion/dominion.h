@@ -131,4 +131,5 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 
 int baronRefactored(int choice1, struct gameState *state, int currentPlayer);
 int minionRefactored(int choice1, int choice2, struct gameState *state, int handPos, int currentPlayer);
+int tributeRefactored(struct gameState *state, int currentPlayer, int nextPlayer, int* tributeRevealedCards);
 #endif
