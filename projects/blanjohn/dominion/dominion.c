@@ -998,7 +998,7 @@ int tributeRefactored(struct gameState *state, int currentPlayer, int nextPlayer
         if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold)
         { //Treasure cards
         //bug introduced so that player does not gain any coins
-            state->coins = state->coins + 0;
+            state->coins += 2;
         }
 
         else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall)
